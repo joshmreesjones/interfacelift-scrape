@@ -1,12 +1,4 @@
 """
-Overview
-========
-Interfacelift (interfacelift.com) has a daily wallpaper on the homepage. I wrote
-this script to get this daily image and set it as the desktop background on my
-computer. I couldn't use their API because the free trial is only 100 requests,
-so I went with web scraping. I use Beautiful Soup (which has excellent
-documentation). This is my first web scraping script!
-
 Getting the image
 =================
 The final link to the image is of the format:
@@ -32,10 +24,11 @@ use 1600x900.
 """
 
 from bs4 import BeautifulSoup
-import re, requests
+import os, re, requests
 
 ROOT_DOMAIN = "http://interfacelift.com"
 RESOLUTION = "1600x900"
+DOWNLOAD_LOCATION = "/home/josh/cs/interfacelift"
 
 # get homepage HTML and parse with Beautiful Soup
 homepage_raw = requests.get(ROOT_DOMAIN)
@@ -56,6 +49,15 @@ id_ = js_id_script[id_index:id_index + 7]
 preview_src = image_label.a.img["src"]
 prefix = re.search("[0-9]{5}_[A-Za-z0-9]+_", preview_src).group()
 
-image_link = "http://interfacelift.com/wallpaper/%s/%s%s.jpg" % (
+image_url = "http://interfacelift.com/wallpaper/%s/%s%s.jpg" % (
 					id_, prefix, RESOLUTION)
+
+# Code from: http://stackoverflow.com/q/16694907/1697249
+local_filename = image_url.split("/")[-1]
+r = requests.get(image_url, stream=True)
+with open(local_filename, "wb") as f:
+	for chunk in r.iter_content(chunk_size=1024):
+		if chunk:
+			f.write(chunk)
+			f.flush()
 
