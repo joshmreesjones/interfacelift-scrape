@@ -28,7 +28,7 @@ import os, re, requests
 
 ROOT_DOMAIN = "http://interfacelift.com"
 RESOLUTION = "1600x900"
-DOWNLOAD_LOCATION = "/home/josh/cs/interfacelift"
+DOWNLOAD_LOCATION = "/home/josh/Pictures/Wallpapers/interfacelift"
 
 # get homepage HTML and parse with Beautiful Soup
 homepage_raw = requests.get(ROOT_DOMAIN)
@@ -52,12 +52,22 @@ prefix = re.search("[0-9]{5}_[A-Za-z0-9]+_", preview_src).group()
 image_url = "http://interfacelift.com/wallpaper/%s/%s%s.jpg" % (
 					id_, prefix, RESOLUTION)
 
+# if download location doesn't exist
+if not os.path.isdir(DOWNLOAD_LOCATION):
+	# create it
+	os.makedirs(DOWNLOAD_LOCATION)
+
 # Code from: http://stackoverflow.com/q/16694907/1697249
 local_filename = image_url.split("/")[-1]
+print(local_filename)
+local_file_path = DOWNLOAD_LOCATION + "/" + local_filename
 r = requests.get(image_url, stream=True)
-with open(local_filename, "wb") as f:
+with open(local_file_path, "wb") as f:
 	for chunk in r.iter_content(chunk_size=1024):
 		if chunk:
 			f.write(chunk)
 			f.flush()
+
+# store in ~/Pictures/Wallpapers/interfacelift
+# timestamped YYYY-MM-DD-name.jpg
 
