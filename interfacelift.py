@@ -24,20 +24,35 @@ use 1600x900.
 """
 
 from bs4 import BeautifulSoup
+from subprocess import call
 import os, re, requests
+
+
 
 ROOT_DOMAIN = "http://interfacelift.com"
 RESOLUTION = "1600x900"
 DOWNLOAD_LOCATION = "/home/josh/Pictures/Wallpapers/interfacelift"
 
+DEBUGGING = True
+
+def print_debug(message):
+	if (DEBUGGING): print(message)
+
+
+
 # get homepage HTML and parse with Beautiful Soup
 homepage_raw = requests.get(ROOT_DOMAIN)
 homepage = BeautifulSoup(homepage_raw.text)
+print_debug("Homepage downloaded.")
+
+
 
 # homepage image label
 image_label = homepage.body.find_all("div", class_="wallpaper")[0]
 
-# <id>
+
+
+# find <id>
 # id from https://interfacelift.com/inc_NEW/jscript002.js
 js_id_script_url = "https://interfacelift.com/inc_NEW/jscript002.js"
 js_id_script = requests.get(js_id_script_url).text
@@ -45,29 +60,55 @@ id_line = "document.getElementById('download_'+id).innerHTML = \"<a href=\\\"/wa
 id_index = js_id_script.find(id_line) + len(id_line)
 id_ = js_id_script[id_index:id_index + 7]
 
-# <prefix>
+print_debug("<id> part of path found: " + id_)
+
+
+
+# find <prefix>
 preview_src = image_label.a.img["src"]
 prefix = re.search("[0-9]{5}_[A-Za-z0-9]+_", preview_src).group()
 
+print_debug("<prefix> parth of path found: " + prefix)
+
+
+
+# Construct image URL
 image_url = "http://interfacelift.com/wallpaper/%s/%s%s.jpg" % (
 					id_, prefix, RESOLUTION)
+print_debug("Final image URL: " + image_url)
 
-# if download location doesn't exist
+
+
+# create download location if it doesn't exist
 if not os.path.isdir(DOWNLOAD_LOCATION):
-	# create it
+	print_debug("Download location not found. Creating " + DOWNLOAD_LOCATION)
 	os.makedirs(DOWNLOAD_LOCATION)
 
-# Code from: http://stackoverflow.com/q/16694907/1697249
+
+
+# Download the image
 local_filename = image_url.split("/")[-1]
-print(local_filename)
 local_file_path = DOWNLOAD_LOCATION + "/" + local_filename
-r = requests.get(image_url, stream=True)
-with open(local_file_path, "wb") as f:
-	for chunk in r.iter_content(chunk_size=1024):
-		if chunk:
-			f.write(chunk)
-			f.flush()
+file_exists = os.path.isfile(local_file_path)
 
-# store in ~/Pictures/Wallpapers/interfacelift
-# timestamped YYYY-MM-DD-name.jpg
+if (file_exists): print_debug("Current Interfacelift image already downloaded. Skipping download.")
 
+# Download the image if it's not downloaded already
+if not file_exists:
+	print_debug("Downloading file\n\tfrom: " + image_url + "\n\tto: " + local_file_path)
+
+	# Code from: http://stackoverflow.com/q/16694907/1697249
+	r = requests.get(image_url, stream=True)
+	with open(local_file_path, "wb") as f:
+		for chunk in r.iter_content(chunk_size=1024):
+			if chunk:
+				f.write(chunk)
+				f.flush()
+	print_debug("File downloaded.")
+
+
+
+# update desktop background
+command = "gsettings set org.gnome.desktop.background picture-uri file://" + local_file_path
+print_debug("Running " + command)
+call(command.split(" "))
