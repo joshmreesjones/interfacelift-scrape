@@ -12,4 +12,4 @@ How to use
 
 3. Run the script.
 
-4. If you'd like, add the script to your `crontab.daily` folder for new desktop backgrounds.
+4. If you'd like, you can set up a Linux system to run the script regularly. Run `crontab -e` and add a line to the bottom according to the instructions. For example, to run it at 4:00 am every morning, I put `0 4 * * * python /path/to/interfacelift.py`.
