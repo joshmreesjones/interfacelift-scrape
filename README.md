@@ -21,10 +21,4 @@ How to use
 
 Issues?
 -------
-If you have any issues, feel free to open an issue.
-=======
-    * For example, I have `0 * * * * bash ~/path/to/interfacelift.sh` in my `crontab`.
-
-Issues?
--------
 If you have any issues, feel free to open an issue and I will see what I can do.
