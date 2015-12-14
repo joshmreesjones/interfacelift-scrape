@@ -12,9 +12,9 @@ How to use
 
 1. Download the script.
 
-2. Set `RESOLUTION` and `DOWNLOAD_LOCATION` to your preferred values in `interfacelift.py`. I set this as ~/Pictures/Wallpapers/interfacelift`.
+2. Set `RESOLUTION` and `DOWNLOAD_LOCATION` to your preferred values in `interfacelift.py`. I set this as `~/Pictures/Wallpapers/interfacelift`.
 
 3. Run the script.
 
-4. If you'd like, you can set up a Linux system to run the script regularly. Run `crontab -e` and add a line to the bottom according to the instructions. In your crontab line, run `interfacelift.sh`. See `interfacelift.sh` for more information about why it is requred to run rather than `interfacelift.py`.
-    * For example, I have `0 * * * * bash ~/path/to/interfacelift.sh` in my crontab.
+4. If you'd like, you can set up a Linux system to run the script regularly. Run `crontab -e` and add a line to the bottom according to the instructions. In your crontab line, run `interfacelift.sh`. See `interfacelift.sh` for more information about why it is requred to run that instead of `interfacelift.py`.
+    * For example, I have `0 * * * * bash ~/path/to/interfacelift.sh` in my `crontab`.
