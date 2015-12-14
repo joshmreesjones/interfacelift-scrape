@@ -4,12 +4,17 @@ Overview
 
 How to use
 ----------
-0. Make sure you have Beautiful Soup 4, Python's `requests`, and Python 3. Make sure you run something that has `gsettings` (I run Ubuntu 14.04).
+0. Make sure you have:
+    1. Python 3
+    2. Python's `requests` module (try `import requests` in Python)
+    3. Beautiful Soup 4 (try `import bs4` in Python)
+    4. gsettings (try `gsettings --version` in your terminal)
 
 1. Download the script.
 
-2. Set `RESOLUTION` and `DOWNLOAD_LOCATION` to your preferred values in `interfacelift.py`.
+2. Set `RESOLUTION` and `DOWNLOAD_LOCATION` to your preferred values in `interfacelift.py`. I set this as ~/Pictures/Wallpapers/interfacelift`.
 
 3. Run the script.
 
-4. If you'd like, you can set up a Linux system to run the script regularly. Run `crontab -e` and add a line to the bottom according to the instructions. For example, to run it at 4:00 am every morning, I put `0 4 * * * python /path/to/interfacelift.py`.
+4. If you'd like, you can set up a Linux system to run the script regularly. Run `crontab -e` and add a line to the bottom according to the instructions. In your crontab line, run `interfacelift.sh`. See `interfacelift.sh` for more information about why it is requred to run rather than `interfacelift.py`.
+    * For example, I have `0 * * * * bash ~/path/to/interfacelift.sh` in my crontab.
