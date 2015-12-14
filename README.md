@@ -8,7 +8,7 @@ How to use
     1. Python 3
     2. Python's `requests` module (try `import requests` in Python)
     3. Beautiful Soup 4 (try `import bs4` in Python)
-    4. gsettings (try `gsettings --version` in your terminal)
+    4. `gsettings` (try `gsettings --version` in your terminal)
 
 1. Download the script.
 
@@ -17,4 +17,8 @@ How to use
 3. Run the script.
 
 4. If you'd like, you can set up a Linux system to run the script regularly. Run `crontab -e` and add a line to the bottom according to the instructions. In your crontab line, run `interfacelift.sh`. See `interfacelift.sh` for more information about why it is requred to run that instead of `interfacelift.py`.
-    * For example, I have `0 * * * * bash ~/path/to/interfacelift.sh` in my `crontab`.
+    * For example, I have `0 * * * * bash ~/path/to/interfacelift.sh` in my `crontab`. This runs the script every hour.
+
+Issues?
+-------
+If you have any issues, feel free to open an issue.
