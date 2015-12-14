@@ -36,7 +36,7 @@ DOWNLOAD_LOCATION = "/home/josh/Pictures/Wallpapers/interfacelift"
 DEBUGGING = True
 
 def print_debug(message):
-	if (DEBUGGING): print(message)
+    if (DEBUGGING): print(message)
 
 
 
@@ -73,16 +73,15 @@ print_debug("<prefix> parth of path found: " + prefix)
 
 
 # Construct image URL
-image_url = "http://interfacelift.com/wallpaper/%s/%s%s.jpg" % (
-					id_, prefix, RESOLUTION)
+image_url = "http://interfacelift.com/wallpaper/%s/%s%s.jpg" % (id_, prefix, RESOLUTION)
 print_debug("Final image URL: " + image_url)
 
 
 
 # create download location if it doesn't exist
 if not os.path.isdir(DOWNLOAD_LOCATION):
-	print_debug("Download location not found. Creating " + DOWNLOAD_LOCATION)
-	os.makedirs(DOWNLOAD_LOCATION)
+    print_debug("Download location not found. Creating " + DOWNLOAD_LOCATION)
+    os.makedirs(DOWNLOAD_LOCATION)
 
 
 
@@ -91,20 +90,20 @@ local_filename = image_url.split("/")[-1]
 local_file_path = DOWNLOAD_LOCATION + "/" + local_filename
 file_exists = os.path.isfile(local_file_path)
 
-if (file_exists): print_debug("Current Interfacelift image already downloaded. Skipping download.")
+if (file_exists):
+    print_debug("Current Interfacelift image already downloaded. Skipping download.")
+else:
+    # Download the image if it's not downloaded already
+    print_debug("Downloading file\n\tfrom: " + image_url + "\n\tto: " + local_file_path)
 
-# Download the image if it's not downloaded already
-if not file_exists:
-	print_debug("Downloading file\n\tfrom: " + image_url + "\n\tto: " + local_file_path)
-
-	# Code from: http://stackoverflow.com/q/16694907/1697249
-	r = requests.get(image_url, stream=True)
-	with open(local_file_path, "wb") as f:
-		for chunk in r.iter_content(chunk_size=1024):
-			if chunk:
-				f.write(chunk)
-				f.flush()
-	print_debug("File downloaded.")
+    # Code from: http://stackoverflow.com/q/16694907/1697249
+    r = requests.get(image_url, stream=True)
+    with open(local_file_path, "wb") as f:
+        for chunk in r.iter_content(chunk_size=1024):
+            if chunk:
+                f.write(chunk)
+                f.flush()
+        print_debug("File downloaded.")
 
 
 
