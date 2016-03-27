@@ -40,19 +40,19 @@ def print_debug(message):
 
 
 
-# get homepage HTML and parse with Beautiful Soup
+# Get homepage HTML and parse with Beautiful Soup
 homepage_raw = requests.get(ROOT_DOMAIN)
 homepage = BeautifulSoup(homepage_raw.text)
 print_debug("Homepage downloaded.")
 
 
 
-# homepage image label
+# Homepage image label
 image_label = homepage.body.find_all("div", class_="wallpaper")[0]
 
 
 
-# find <id>
+# Find <id>
 # id from https://interfacelift.com/inc_NEW/jscript002.js
 js_id_script_url = "https://interfacelift.com/inc_NEW/jscript002.js"
 js_id_script = requests.get(js_id_script_url).text
@@ -64,7 +64,7 @@ print_debug("<id> part of path found: " + id_)
 
 
 
-# find <prefix>
+# Find <prefix>
 preview_src = image_label.a.img["src"]
 prefix = re.search("[0-9]{5}_[A-Za-z0-9]+_", preview_src).group()
 
@@ -78,7 +78,7 @@ print_debug("Final image URL: " + image_url)
 
 
 
-# create download location if it doesn't exist
+# Create download location if it doesn't exist
 if not os.path.isdir(DOWNLOAD_LOCATION):
     print_debug("Download location not found. Creating " + DOWNLOAD_LOCATION)
     os.makedirs(DOWNLOAD_LOCATION)
@@ -98,6 +98,8 @@ else:
 
     # Code from: http://stackoverflow.com/q/16694907/1697249
     r = requests.get(image_url, stream=True)
+    if r.status_code == 404:
+        print("HTTP 404 occurred when downloading the image.")
     with open(local_file_path, "wb") as f:
         for chunk in r.iter_content(chunk_size=1024):
             if chunk:
@@ -107,7 +109,7 @@ else:
 
 
 
-# update desktop background
+# Update desktop background
 command = "gsettings set org.gnome.desktop.background picture-uri file://" + local_file_path
 print_debug("Running " + command)
 call(command.split(" "))
